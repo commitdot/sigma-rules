@@ -1,0 +1,30 @@
+title: SSH Brute Force Attack
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: stable
+description: >
+  Detects multiple SSH authentication failures from a single source IP
+  within a short time window, indicating a brute force attack.
+author: commitdot
+date: 2025/01/15
+references:
+  - https://attack.mitre.org/techniques/T1110/001/
+tags:
+  - attack.credential_access
+  - attack.t1110
+  - attack.t1110.001
+logsource:
+  product: linux
+  service: sshd
+detection:
+  keywords:
+    - "Failed password for"
+  timeframe: 5m
+  condition: keywords | count() by src_ip > 10
+falsepositives:
+  - Misconfigured automation scripts
+  - Legitimate pentest activity
+level: high
+fields:
+  - src_ip
+  - user
+  - timestamp

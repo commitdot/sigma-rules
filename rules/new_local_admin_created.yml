@@ -1,0 +1,35 @@
+title: New Local Administrator Account Created
+id: c3d4e5f6-a7b8-9012-cdef-123456789012
+status: stable
+description: >
+  Detects when a new local user account is created AND immediately
+  added to the Administrators group — a persistence technique.
+author: commitdot
+date: 2025/01/15
+references:
+  - https://attack.mitre.org/techniques/T1136/001/
+tags:
+  - attack.persistence
+  - attack.t1136
+  - attack.t1136.001
+  - attack.privilege_escalation
+  - attack.t1098
+logsource:
+  product: windows
+  service: security
+detection:
+  account_created:
+    EventID: 4720
+  added_to_admins:
+    EventID: 4732
+    GroupName: "Administrators"
+  timeframe: 30s
+  condition: account_created and added_to_admins
+falsepositives:
+  - Legitimate IT provisioning (correlate with change tickets)
+level: high
+fields:
+  - SubjectUserName
+  - TargetUserName
+  - GroupName
+  - IpAddress

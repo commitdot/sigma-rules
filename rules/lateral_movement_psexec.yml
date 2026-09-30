@@ -1,0 +1,33 @@
+title: Lateral Movement via PsExec Remote Service Creation
+id: d4e5f6a7-b8c9-0123-defa-234567890123
+status: experimental
+description: >
+  Detects PsExec-style lateral movement: creation of PSEXESVC service
+  on a remote host, a classic lateral movement technique used by
+  both attackers and red teams.
+author: commitdot
+date: 2025/01/15
+references:
+  - https://attack.mitre.org/techniques/T1021/002/
+  - https://docs.microsoft.com/en-us/sysinternals/downloads/psexec
+tags:
+  - attack.lateral_movement
+  - attack.t1021
+  - attack.t1021.002
+  - attack.execution
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 7045
+    ServiceName: "PSEXESVC"
+  condition: selection
+falsepositives:
+  - Legitimate sysadmin use of PsExec (verify with change management)
+level: high
+fields:
+  - ComputerName
+  - ServiceName
+  - ServiceFileName
+  - AccountName
